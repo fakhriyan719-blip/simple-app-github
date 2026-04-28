@@ -1,9 +1,6 @@
 name: Build, Push and Deploy Docker Image
 run-name: Build, Push and Deploy Image
 on: [push]
-permissions:
-  contents: read
-  packages: write
 env:
   IMAGE_NAME: "ghcr.io/fakhriyan719-blip/nginx-hmad91"
 jobs:
