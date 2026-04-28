@@ -1,25 +1,33 @@
 name: Build, Push and Deploy Docker Image
 run-name: Build, Push and Deploy Image
+
 on: [push]
-env:
-  IMAGE_NAME: "ghcr.io/fakhriyan719-blip/nginx-hmad91"
-jobs:
+
 permissions:
   contents: read
   packages: write
+
+env:
+  IMAGE_NAME: "ghcr.io/fakhriyan719-blip/nginx-hmad91"
+
+jobs:
   build-push-image:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
+
       - name: Build Image
-        run: docker build -t $IMAGE_NAME .
+        run: docker build -t ${{ env.IMAGE_NAME }} .
+
       - name: List Image
         run: docker images
+
       - name: Login to GitHub Registry
-        run: echo ${{ secrets.TOKEN_GITHUB }} | docker login ghcr.io -u fakhriyan719-blip --password-stdin
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ fakhriyan719-blip }} --password-stdin
+
       - name: Push Image
-        run: docker push $IMAGE_NAME
+        run: docker push ${{ env.IMAGE_NAME }}
 
   deploy:
     needs: build-push-image
@@ -27,13 +35,15 @@ permissions:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
+
       - name: Login to GitHub Registry
-        run: echo ${{ secrets.TOKEN_GITHUB }} | docker login ghcr.io -u fakhriyan719-blip --password-stdin
-      - name: stop and remove existing container
-        run: docker compose down --rmi all
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ fakhriyan719-blip }} --password-stdin
+
       - name: start container
         run: docker compose up -d
+
       - name: view container
         run: docker compose ps
+
       - name: check container
-        run: curl localhost:8080
+        run: sleep 5 && curl localhost:8080
