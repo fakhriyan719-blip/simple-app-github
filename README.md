@@ -1,1 +1,1 @@
-# Project Simple App
+# Simple App Project
