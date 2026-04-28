@@ -7,6 +7,9 @@ permissions:
 env:
   IMAGE_NAME: "ghcr.io/fakhriyan719-blip/nginx-hmad91"
 jobs:
+permissions:
+  contents: read
+  packages: write
   build-push-image:
     runs-on: ubuntu-latest
     steps:
